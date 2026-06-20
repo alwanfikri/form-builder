@@ -25,18 +25,18 @@ export class AuditInterceptor implements NestInterceptor {
     const user = (req as any).user;
     const ipHash = req.ip
       ? crypto.createHash('sha256').update(req.ip).digest('hex').substring(0, 16)
-      : null;
+      : undefined;
 
     return next.handle().pipe(
       tap(() => {
         this.auditRepo.save({
-          actorId: user?.id,
-          actorEmail: user?.email,
+          actorId: user?.id ?? undefined,
+          actorEmail: user?.email ?? undefined,
           action: `${req.method} ${req.path}`,
           resource: this.extractResource(req.path),
           payload: { body: req.body, params: req.params },
           ipHash,
-        }).catch(() => {/* non-critical */});
+        } as any).catch(() => {/* non-critical */});
       }),
     );
   }

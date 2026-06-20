@@ -173,7 +173,7 @@ export class ShortlinkService {
     return this.shortlinkRepo.findOne({
       where: { shortCode },
       relations: ['currentForm', 'history', 'history.form'],
-    });
+    }) as Promise<ShortlinkEntity>;
   }
 
   // ─── Resolve (public shortlink access) ────────────────────
@@ -380,7 +380,7 @@ export class ShortlinkService {
     const session = this.sessionRepo.create({
       shortlinkId: cached.shortlinkId,
       sessionToken: tokenId,
-      respondentHash: context.userEmail ? hashEmail(context.userEmail) : null,
+      respondentHash: context.userEmail ? hashEmail(context.userEmail) : undefined,
       respondentFingerprint: {
         ipHash: context.ip ? hashIp(context.ip) : null,
         userAgent: context.userAgent,

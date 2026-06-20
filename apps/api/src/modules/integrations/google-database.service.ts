@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { google } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+import { google, Auth } from 'googleapis';
 import type {
   FormSchema, FormField, FormResponse,
   GoogleDatabaseConfig, QueryFilter, PaginatedResponse,
@@ -11,7 +10,7 @@ export class GoogleDatabaseService {
   private readonly logger = new Logger(GoogleDatabaseService.name);
 
   private getClients(accessToken: string) {
-    const auth = new OAuth2Client(
+    const auth = new Auth.OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
     );
@@ -34,10 +33,10 @@ export class GoogleDatabaseService {
       requestBody: {
         name: `Form: ${formSchema.name}`,
         mimeType: 'application/vnd.google-apps.folder',
-        parents: [process.env.FORMS_ROOT_FOLDER_ID],
+        parents: [process.env.FORMS_ROOT_FOLDER_ID!],
       },
       fields: 'id, webViewLink',
-    });
+    } as any) as any;
 
     // 2. Create response spreadsheet with headers
     const spreadsheet = await sheets.spreadsheets.create({

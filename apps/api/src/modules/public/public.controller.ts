@@ -58,7 +58,7 @@ export class PublicController {
         });
 
       case 'form': {
-        const form = await this.formsService.getPublicForm(result.formId);
+        const form = await this.formsService.getPublicForm(result.formId!);
         res.cookie('ext_session', result.sessionToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
