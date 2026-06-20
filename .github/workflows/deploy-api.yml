@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render deploy
+        if: ${{ secrets.RENDER_SERVICE_ID != '' }}
         run: |
           curl -s -X POST \
             "https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_DEPLOY_KEY }}" \
