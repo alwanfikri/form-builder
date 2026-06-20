@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.turbo/
+.env
+.env.local
+*.env
+coverage/
+.next/
+build/
+.claude/settings.local.json

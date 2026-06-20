@@ -1,0 +1,55 @@
+services:
+  - type: web
+    name: form-builder-api
+    runtime: node
+    region: singapore   # closest to Indonesia
+    plan: free
+    buildCommand: npm install -g pnpm && pnpm install && pnpm --filter @form-builder/api build
+    startCommand: node apps/api/dist/main
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: form-builder-db
+          property: connectionString
+      - key: REDIS_URL
+        sync: false   # set manually from Upstash
+      - key: JWT_SECRET
+        generateValue: true
+      - key: EXT_SESSION_SECRET
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: MS_CLIENT_ID
+        sync: false
+      - key: MS_CLIENT_SECRET
+        sync: false
+      - key: MS_TENANT_ID
+        sync: false
+      - key: MS_CALLBACK_URL
+        sync: false
+      - key: COMPANY_DOMAIN
+        sync: false
+      - key: FORMS_ROOT_FOLDER_ID
+        sync: false
+      - key: SHAREPOINT_DRIVE_ID
+        sync: false
+      - key: INTERNAL_GROUP_EMAIL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false   # your GitHub Pages URL
+
+databases:
+  - name: form-builder-db
+    plan: free
+    region: singapore
+    databaseName: formbuilder
+    user: formbuilder
